@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- 引入配置文件 -->
+    <properties resource="mybatisGenerator/generatorConfig.properties"/>
+
+    <!-- 数据库驱动:选择你的本地硬盘上面的数据库驱动包-->
+    <classPathEntry location="F:/Maven\repo/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar"/>
+
+    <context id="MysqlContext"  targetRuntime="MyBatis3">
+        <!-- 注释 -->
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否生成注释代时间戳-->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- jdbc连接 -->
+        <!--数据库链接URL，用户名、密码 -->
+        <jdbcConnection driverClass="${jdbc_driver}"
+                        connectionURL="${jdbc_url}"
+                        userId="${jdbc_user}"
+                        password="${jdbc_password}">
+        </jdbcConnection>
+        <!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
+			userId="yycg"
+			password="yycg">
+		</jdbcConnection> -->
+
+        <!-- 类型转换 -->
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+			NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成实体类地址 -->
+        <javaModelGenerator targetPackage="${models_package}"
+                            targetProject="${models_dir}">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成mapxml文件 -->
+        <sqlMapGenerator targetPackage="${mappers_package}"
+                         targetProject="${mappers_dir}">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成DAO文件-->
+        <!-- XMLMAPPER生成xml映射文件, ANNOTATEDMAPPER生成的dao采用注解来写sql -->
+        <javaClientGenerator type="${dao_type}"
+                             targetPackage="${daos_package}"
+                             targetProject="${daos_dir}">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
+        <table tableName="newstype" domainObjectName="NewsType" mapperName="NewsTypeDao"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <!--开启驼峰命名法-->
+            <property name="useActualColumnNames" value="true" />
+            <!-- 忽略列，不生成bean 字段 -->
+            <!--<ignoreColumn column="id" />-->
+            <!-- 数据库表主键 -->
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+            <!-- 指定列的java数据类型 -->
+            <columnOverride column="id" jdbcType="TINYINT" javaType="int"/>
+            <columnOverride column="typename" property="typeName"></columnOverride>
+        </table>
+        <table tableName="news" domainObjectName="News"  mapperName="NewsDao"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+            <columnOverride column="id" javaType="int"/>
+            <columnOverride column="newstypeid" javaType="int"/>
+            <columnOverride column="read" javaType="int"/>
+            <!--<oneToOne mappingTable="newstype" column="id" joinColumn="newstypeid"></oneToOne>-->
+        </table>
+
+        <!-- 通配符情况 -->
+        <!--%代表全部表-->
+        <!--<table tableName="%" mapperName="{0}Dao">-->
+        <!--<generatedKey column="id" sqlStatement="Mysql"/>-->
+        <!--</table>-->
+
+        <!--sys%代表以sys开头的表-->
+        <!--<table tableName="sys%" mapperName="{0}Dao">-->
+        <!--<generatedKey column="id" sqlStatement="Mysql"/>-->
+        <!--</table>-->
+    </context>
+</generatorConfiguration>
